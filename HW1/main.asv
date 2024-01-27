@@ -35,4 +35,4 @@ T_data = T1_data;
 [P,Q] = PQ_calc(V_data(:,size(V_data,2)),T_data(:,size(T_data,2)),Y)
 
 % plotting convergence curves
-mplot([1:size(V1_data,2)],T1,[1:size(V2_data,2)],T2)
+mplot([1:size(V1_data,2)],T1,[1:size(V1_data,2)],T1)

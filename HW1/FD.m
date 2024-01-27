@@ -9,7 +9,7 @@ del_T = zeros(n_bus,1);
 del_V = zeros(n_bus,1);
 
 % Iteration loop
-while(Tol > 1e-5 & i < 100)
+while(Tol > 1e-3 & i < 100)
     i = i+1;
     V = V+del_V;
     T = T+del_T;

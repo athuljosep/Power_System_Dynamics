@@ -16,7 +16,7 @@ end
 if(t == 1)
     for k = 1:size(D_br,1)
         if(D_br(k,15) ~= 0)
-            t = D_br(k,15);
+            t = D_br(k,15)
             ((t^2) / i*D_br(k,8));
             Y(D_br(k,1),D_br(k,1)) = Y(D_br(k,1),D_br(k,1)) + Y(D_br(k,1),D_br(k,2)) - (Y(D_br(k,1),D_br(k,2)))/(t^2);
             Y(D_br(k,1),D_br(k,1));
