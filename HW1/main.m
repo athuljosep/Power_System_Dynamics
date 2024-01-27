@@ -2,9 +2,9 @@ clc
 clear all; close all;
 
 % Initializing 14 bus and importing data
-n_bus = 14;
-bus_data = importdata('ieee14bus.txt').data;
-branch_data = importdata('ieee14branch.txt').data;
+n_bus = 11;
+bus_data = importdata('ieee11bus.txt').data;
+branch_data = importdata('ieee11branch.txt').data;
    
 % Ybus formation
 t = 1; % 0 for without tap, 1 for with tap
@@ -29,10 +29,10 @@ T = zeros(n_bus,1);
 [V1_data,T1_data,T1] = NR(bus_data,V,T,P_inj,Q_inj,n_bus,Y,n_pq,pq_i);
 V_data = V1_data;
 T_data = T1_data;
-[V2_data,T2_data,T2] = FD(bus_data,V,T,P_inj,Q_inj,n_bus,Y,n_pq,pq_i);
+% [V2_data,T2_data,T2] = FD(bus_data,V,T,P_inj,Q_inj,n_bus,Y,n_pq,pq_i);
 
 % P,Q calculation after convergence
 [P,Q] = PQ_calc(V_data(:,size(V_data,2)),T_data(:,size(T_data,2)),Y)
 
 % plotting convergence curves
-mplot([1:size(V1_data,2)],T1,[1:size(V2_data,2)],T2)
+mplot([1:size(V1_data,2)],T1,[1:size(V1_data,2)],T1)
