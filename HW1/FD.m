@@ -24,7 +24,7 @@ while(Tol > 1e-3 & i < 100)
     for j = 1:n_pq
         del_V(pq_i(j)) = d_V(j); % magnitude calculation
     end
-    Tol = max(abs([del_T; del_V]));
+    Tol = max(abs([P_T; Q_V]));
     Tol_data(i) = Tol;
 end
 end
