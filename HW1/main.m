@@ -1,7 +1,7 @@
 clc
 clear all; close all;
 
-% Initializing 14 bus and importing data
+% Initializing Kundur 2 area system and importing data
 n_bus = 11;
 % bus_data = importdata('ieee11bus.txt').data;
 bus_data = importdata('ieee11bus_allPV.txt').data;
