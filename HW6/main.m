@@ -71,7 +71,7 @@ E_g = [V(1); E_g]
 Theta = [T(1); Theta]
 omega_s = 2*pi*60
 
-x0 = [1.5 1.2 1.5 1.2 1.5 1.2]
+x0 = [0.2 1.2 0.2 1.2 -0.2 1.2]
 
 fun = @(x)paramfun(x, P_gen, Y_gen, E_g, Theta);
 x = fsolve(fun,x0)
