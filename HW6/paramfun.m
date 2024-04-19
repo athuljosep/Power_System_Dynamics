@@ -6,9 +6,9 @@ function F = paramfun(x,P,Y,E,T)
     for k = 1:3
         
         i = k+1
-        Pe = Ym(i,1)*E(i)*E(1)*cos(x(i)-T(1)-);
+        Pe = Ym(i,1)*E(i)*E(1)*cos(x(i)-T(1)-Ya(i,1));
         for j = 2:4
-            Pe = Pe + Ym(i,j)*E(i)*E(j)*cos(x(i)-x());
+            Pe = Pe + Ym(i,j)*E(i)*E(j)*cos(x(i)-x(j)-Ya(i,j));
         end
         % (w-1)ws
         F1 = [(x(2*k)-1)*omega_s;
