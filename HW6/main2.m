@@ -69,11 +69,81 @@ E = (V(12:14).*exp(i*T(12:14))) + (i*X_gen.*I_gen)
 [Theta, E_g] = cart2pol(real(E),imag(E))
 E_g = [V(1); E_g]
 Theta = [T(1); Theta]
-omega_s = 2*pi*60
+omega_s = 2*pi*60;
 
-x0 = [0.5 1.2 0.5 1.2 0.5 1.2]
+%% using fsolve
+% x0 = [0.5 1.2 0.5 1.2 0.5 1.2]
+% 
+% fun = @(x)paramfun(x, P_gen, Y_gen, E_g);
+% x = fsolve(fun,x0)
 
-fun = @(x)paramfun(x, P_gen, Y_gen, E_g);
-x = fsolve(fun,x0)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% using vpasolve
+x = sym('x', [1 6]);
+F = type3(x, P_gen, Y_gen, E_g);
 
+sol = vpasolve(F,x);
+
+%% Transient Stability Analysis
+% Prefault
+Ynet = Y
+
+n_bus = 11;
+bus_data = importdata('ieee11bus.txt').data;
+% bus_data = importdata('ieee11bus_allPV.txt').data;
+branch_data = importdata('ieee11branch.txt').data;
+   
+% Ybus formation
+t = 0; % 0 for without tap, 1 for with tap
+Y = y_bus_calc(n_bus,bus_data,branch_data,t);
+
+
+
+Ynew = y_update(Y)
+
+
+% % making Jacobian
+% for i = 1:6
+%     for j = 1:6
+%         J(i,j) = diff(F(j),x(i));
+%     end
+% end
+% 
+% J_val = subs(J,x,{sol.x1,sol.x2,sol.x3,sol.x4,sol.x5,sol.x6});
+% J_val = double(J_val);
+% 
+% % eigen value and vectors
+% [right_eigen_vector, eigen_values] = eig(J_val);
+% left_eigen_vector = inv(right_eigen_vector);
+% % participation factor
+% normalized_participant_vector = []; % each column contains participation factor pof other state to that mode
+% for i = 1: length(x)
+%     participation_matrix = right_eigen_vector(:,i)*left_eigen_vector(i,:);
+%     diagonal_vector = abs(diag(participation_matrix));
+%     normalized_participant_vector = [normalized_participant_vector diagonal_vector./max(diagonal_vector)];
+% end
+% % finding mode frequency
+% eigen_frequency_mode= abs(imag(diag(eigen_values)))/2/pi;
+% 
+% % [right,eigen,left] = eig(J_val);
+% % 
+% % t = sym('t', [1 3]);
+% % w = sym('w', [1 3]);
+% % Eq = sym('Eq', [1 3]);
+% % Ed = sym('Ed', [1 3]);
+% % Efd = sym('Efd', [1 3]);
+% % Pm = sym('Pm', [1 3]);
+% % Vref = sym('Vref', [1 3]);
+% % Pc = sym('Pc', [1 3]);
+% % F = type2(t, w, Eq, Ed, Efd, Pm, Vref, Pc, P_gen, Y_gen, E_g, V, T);
+% % 
+% % % x0 = [0.685 0.614 0.504  1 1 1 0.549 0.537 0.559 0.935 0.991 0.916 7.013 7.204 7.013 7.013 7.204 7.013 1.845 1.935 1.813 1.019 1.040 1.019];
+% % x0 = [0.685 0.614 0.504  1 1 1  0.935 0.991 0.916  0.549 0.537 0.559  1.845 1.935 1.813  7.013 7.204 7.013 1.019 1.040 1.019 7.013 7.204 7.013];
+% % sol = vpasolve(F,[t, w, Eq, Ed, Efd, Pm, Vref, Pc],x0)
+% 
+% 
+% 
+% 
+% 
+% % fun = @([t w Eq Ed Efd Pm])type2(t, w, Eq, Ed, Efd, Pm, P_gen, Y_gen, E_g, V);
+% % x = fsolve(fun,x0);
+% % x'

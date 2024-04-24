@@ -92,22 +92,36 @@ for i = 1:6
 end
 
 J_val = subs(J,x,{sol.x1,sol.x2,sol.x3,sol.x4,sol.x5,sol.x6});
+J_val = double(J_val);
 
-[right,eigen,left] = eig(J_val);
+% eigen value and vectors
+[right_eigen_vector, eigen_values] = eig(J_val);
+left_eigen_vector = inv(right_eigen_vector);
+% participation factor
+normalized_participant_vector = []; % each column contains participation factor pof other state to that mode
+for i = 1: length(x)
+    participation_matrix = right_eigen_vector(:,i)*left_eigen_vector(i,:);
+    diagonal_vector = abs(diag(participation_matrix));
+    normalized_participant_vector = [normalized_participant_vector diagonal_vector./max(diagonal_vector)];
+end
+% finding mode frequency
+eigen_frequency_mode= abs(imag(diag(eigen_values)))/2/pi;
 
-t = sym('t', [1 3]);
-w = sym('w', [1 3]);
-Eq = sym('Eq', [1 3]);
-Ed = sym('Ed', [1 3]);
-Efd = sym('Efd', [1 3]);
-Pm = sym('Pm', [1 3]);
-Vref = sym('Vref', [1 3]);
-Pc = sym('Pc', [1 3]);
-F = type2(t, w, Eq, Ed, Efd, Pm, Vref, Pc, P_gen, Y_gen, E_g, V, T);
-
-% x0 = [0.685 0.614 0.504  1 1 1 0.549 0.537 0.559 0.935 0.991 0.916 7.013 7.204 7.013 7.013 7.204 7.013 1.845 1.935 1.813 1.019 1.040 1.019];
-x0 = [0.685 0.614 0.504  1 1 1  0.935 0.991 0.916  0.549 0.537 0.559  1.845 1.935 1.813  7.013 7.204 7.013 1.019 1.040 1.019 7.013 7.204 7.013];
-sol = vpasolve(F,[t, w, Eq, Ed, Efd, Pm, Vref, Pc],x0)
+% [right,eigen,left] = eig(J_val);
+% 
+% t = sym('t', [1 3]);
+% w = sym('w', [1 3]);
+% Eq = sym('Eq', [1 3]);
+% Ed = sym('Ed', [1 3]);
+% Efd = sym('Efd', [1 3]);
+% Pm = sym('Pm', [1 3]);
+% Vref = sym('Vref', [1 3]);
+% Pc = sym('Pc', [1 3]);
+% F = type2(t, w, Eq, Ed, Efd, Pm, Vref, Pc, P_gen, Y_gen, E_g, V, T);
+% 
+% % x0 = [0.685 0.614 0.504  1 1 1 0.549 0.537 0.559 0.935 0.991 0.916 7.013 7.204 7.013 7.013 7.204 7.013 1.845 1.935 1.813 1.019 1.040 1.019];
+% x0 = [0.685 0.614 0.504  1 1 1  0.935 0.991 0.916  0.549 0.537 0.559  1.845 1.935 1.813  7.013 7.204 7.013 1.019 1.040 1.019 7.013 7.204 7.013];
+% sol = vpasolve(F,[t, w, Eq, Ed, Efd, Pm, Vref, Pc],x0)
 
     
 
