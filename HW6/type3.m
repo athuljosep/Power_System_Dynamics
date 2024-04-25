@@ -1,4 +1,5 @@
 function F = type3(x,P,Y,E)
+    H = [6.5 6.175 6.175];
     omega_s = 2*pi*60;
     Ym = abs(Y);
     Ya = angle(Y);
@@ -10,7 +11,7 @@ function F = type3(x,P,Y,E)
             Pe = Pe + Ym(i,j)*E(i)*E(j)*cos(x((2*k)-1)-x((2*j)-3)-Ya(i,j));
         end
         % (w-1)ws; Pm - Pe - Kd(w-1)
-        F1 = [(x(2*k)-1)*omega_s  (P(k)-Pe-(2*(x(2*k)-1)))/(2*6.5*9)];
+        F1 = [(x(2*k)-1)*omega_s  (P(k)-Pe-(2*(x(2*k)-1)))/(2*H(k)*9)];
         F = [F F1];
     end
 end
