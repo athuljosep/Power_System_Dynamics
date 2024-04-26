@@ -137,23 +137,23 @@ for i = 1:length(state_vars)
     sol_val{i} = sol.(char(state_vars(i)));
 end
 
-% % substituting solution
-% J_val = subs(J, state_vars, sol_val);
-% J_val = double(J_val);
-% 
-% % eigen value and vectors
-% [r_ev, eig_val] = eig(J_val);
-% l_ev = inv(r_ev);
-% 
-% % participation factor
-% norm_p = []; 
-% for i = 1: length(state_vars)
-%     p_mat = r_ev(:,i)*l_ev(i,:);
-%     diag_vec = abs(diag(p_mat));
-%     norm_p = [norm_p diag_vec./max(diag_vec)];
-% end
-% 
-% % calculating mode frequency
-% eigen_frequency_mode= abs(imag(diag(eig_val)))/2/pi;
+% substituting solution
+J_val = subs(J, state_vars, sol_val);
+J_val = double(J_val);
+
+% eigen value and vectors
+[r_ev, eig_val] = eig(J_val);
+l_ev = inv(r_ev);
+
+% participation factor
+norm_p = []; 
+for i = 1: length(state_vars)
+    p_mat = r_ev(:,i)*l_ev(i,:);
+    diag_vec = abs(diag(p_mat));
+    norm_p = [norm_p diag_vec./max(diag_vec)];
+end
+
+% calculating mode frequency
+eigen_frequency_mode= abs(imag(diag(eig_val)))/2/pi;
 
 
