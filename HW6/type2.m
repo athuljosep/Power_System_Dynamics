@@ -2,6 +2,7 @@
 function F = type2(t, w, Eq, Ed, Efd, Pm, Vref, Pc, P,Y,E, V,T)
     %Vref = [1.019 1.040 1.019];
     H = [6.5 6.175 6.175];
+    Kd = 2;
     omega_s = 2*pi*60;
     Xd = (1.8 + 1.7)/2/9;
     Xdp = (0.3 + 0.55)/2/9;
@@ -30,7 +31,7 @@ function F = type2(t, w, Eq, Ed, Efd, Pm, Vref, Pc, P,Y,E, V,T)
         % (w-1)ws; Pm - Pe - Kd(w-1)
 
         F1 = [(w(k)-1)*omega_s,
-              (Pm(k)-Pe-(2*(w(k)-1)))/(2*H(k)*9),
+              (Pm(k)-Pe-(Kd*(w(k)-1)))/(2*H(k)*9),
               (-Eq(k)-((Xd-Xdp)*Id)+Efd(k))/8,
               (-Ed(k)+((Xd-Xdp)*Iq))/0.4,
               (-Efd(k)-(200*(Vref(k) - V(i))))/0.01,

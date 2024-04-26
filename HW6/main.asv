@@ -94,19 +94,16 @@ J_val = double(J_val);
 % eigen value and vectors
 [r_ev, eig_val] = eig(J_val);
 l_ev = inv(r_ev);
-
 % participation factor
-norm_p = []; 
+norm_p = []; % each column contains participation factor pof other state to that mode
 for i = 1: length(x)
     p_mat = r_ev(:,i)*l_ev(i,:);
     diag_vec = abs(diag(p_mat));
     norm_p = [norm_p diag_vec./max(diag_vec)];
 end
-
-% calculating mode frequency
+% finding mode frequency
 eigen_frequency_mode= abs(imag(diag(eig_val)))/2/pi;
 
-%% Type 2
 
 t = sym('t', [1 3]);
 w = sym('w', [1 3]);
@@ -119,13 +116,13 @@ Pc = sym('Pc', [1 3]);
 F = type2(t, w, Eq, Ed, Efd, Pm, Vref, Pc, P_gen, Y_gen, E_g, V, T);
 vars = [t, w, Eq, Ed, Efd, Pm, Vref, Pc];
 
+% x0 = [0.685 0.614 0.504  1 1 1 0.549 0.537 0.559 0.935 0.991 0.916 7.013 7.204 7.013 7.013 7.204 7.013 1.845 1.935 1.813 1.019 1.040 1.019];
 x0 = [0.685 0.614 0.504  1 1 1  0.935 0.991 0.916  0.549 0.537 0.559  1.845 1.935 1.813  7.013 7.204 7.013 1.019 1.040 1.019 7.013 7.204 7.013];
 sol = vpasolve(F,vars,x0)
 
 state_vars = [t, w, Eq, Ed, Efd, Pm];
-
 % making Jacobian
-for i = 1:length(state_vars)
+for i = 1:18
     for j = 1:3
         J(i,j) = diff(F(i),t(j));
         J(i,j+3) = diff(F(i),w(j));
@@ -137,23 +134,25 @@ for i = 1:length(state_vars)
     sol_val{i} = sol.(char(state_vars(i)));
 end
 
-% % substituting solution
-% J_val = subs(J, state_vars, sol_val);
-% J_val = double(J_val);
-% 
-% % eigen value and vectors
-% [r_ev, eig_val] = eig(J_val);
-% l_ev = inv(r_ev);
-% 
-% % participation factor
-% norm_p = []; 
-% for i = 1: length(state_vars)
-%     p_mat = r_ev(:,i)*l_ev(i,:);
-%     diag_vec = abs(diag(p_mat));
-%     norm_p = [norm_p diag_vec./max(diag_vec)];
-% end
-% 
-% % calculating mode frequency
-% eigen_frequency_mode= abs(imag(diag(eig_val)))/2/pi;
+J_val = subs(J, state_vars, sol_val);
+J_val = double(J_val);
+% J_val = subs(J,[t, w, Eq, Ed, Efd, Pm, Vref, Pc],{sol.x1,sol.x2,sol.x3,sol.x4,sol.x5,sol.x6});
+
+[r_ev, eig_val] = eig(J_val);
+l_ev = inv(r_ev);
+% participation factor
+norm_p = []; % each column contains participation factor pof other state to that mode
+for i = 1: length(x)
+    p_mat = r_ev(:,i)*l_ev(i,:);
+    diag_vec = abs(diag(p_mat));
+    norm_p = [norm_p diag_vec./max(diag_vec)];
+end
+% finding mode frequency
+eigen_frequency_mode= abs(imag(diag(eig_val)))/2/pi;
 
 
+
+
+% fun = @([t w Eq Ed Efd Pm])type2(t, w, Eq, Ed, Efd, Pm, P_gen, Y_gen, E_g, V);
+% x = fsolve(fun,x0);
+% x'
