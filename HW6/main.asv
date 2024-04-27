@@ -122,18 +122,22 @@ Y_post = y_post_update();
 
 % generating fault on system equations
 Y_gen_fault = Y_gen_calc(Y_fault)
-F = type3(t, w, P_gen, Y_gen_fault, E_g);
+F_fault = type3(t, w, P_gen, Y_gen_fault, E_g);
 
 t_k = 0.3308;
 w_k = 1.0;
+time_data = [];
 t_data = [];
 w_data = [];
 h = 0.002;
-for time = 0:h:1
-    t_next = t_k + h;
+Tc = 1/60
+for time = 0:h:Tc
+    t_k1 = t_k + h;
+    
 end
 
-
+plot(time_data,t_data)
+plot(time_data,w_data)
 
 %% Type 2
 % 
