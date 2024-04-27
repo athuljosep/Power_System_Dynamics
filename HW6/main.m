@@ -51,7 +51,8 @@ n_bus = 14;
 Y = y_bus_calc(n_bus,bus_data,branch_data,t);
 
 % calculating Ygen matrix
-Y_gen = Y(1:4,1:4)-(Y(1:4,5:14)*inv(Y(5:14,5:14)) *Y(5:14,1:4));
+
+Y_gen = Y_gen_calc(Y)
 
 P_gen = P(2:4);
 Q_gen = Q(2:4);
@@ -119,12 +120,21 @@ Y_pre = Y;
 Y_fault = y_fault_update();
 Y_post = y_post_update();
 
+% generating fault on system equations
+Y_gen_fault = Y_gen_calc(Y_fault)
+F = type3(t, w, P_gen, Y_gen_fault, E_g);
 
+t_k = 0.3308;
+w_k = 1.0;
+t_data = [];
+w_data = [];
+h = 0.002;
+for time = 0:h:1
+    t_next = t_k + h;
+end
 
-
-
-
-
+plot(time,tstore)
+plot(time,wstore)
 
 %% Type 2
 % 
