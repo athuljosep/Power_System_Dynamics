@@ -85,6 +85,7 @@ vars = [t, w];
 
 sol = vpasolve(F,vars)
 
+trans_init = [];
 % making Jacobian
 for i = 1:length(vars)
     for j = 1:3
@@ -92,6 +93,7 @@ for i = 1:length(vars)
         J(i,j+3) = diff(F(i),w(j));
     end
     sol_val{i} = sol.(char(vars(i)));
+    trans_init = [trans_init double(sol.(char(vars(i))))];
 end
 
 % substituting solution
@@ -121,37 +123,72 @@ Y_fault = y_fault_update();
 Y_post = y_post_update();
 
 % generating fault on system equations
-Y_gen_fault = Y_gen_calc(Y_fault)
+Y_gen_fault = Y_gen_calc(Y_fault);
 F_fault = type3(t, w, P_gen, Y_gen_fault, E_g);
 
-t_k1 = 0.3308;
-t_k2 = 0.3308;
-t_k2 = 0.3308;
-w_k1 = 1.0;
-w_k2 = 1.0;
-w_k3 = 1.0;
+% generating post fault system equations
+Y_gen_post = Y_gen_calc(Y_post);
+Y_gen_post = [
+    3.34818416211970 - 12.5097816042871i    1.69301629808215 + 7.35484140935891i    1.05061019016509 + 1.27989784816729i    1.51113287696272 + 1.73895013443404i;
+    1.69301629808215 + 7.35484140935891i    1.39160840514599 - 10.9218584241740i    0.735111802576862 + 0.793462894303177i    1.05335076132197 + 1.07477470896015i;
+    1.05061019016509 + 1.27989784816729i    0.735111802576862 + 0.793462894303177i    1.68186098239602 - 8.38475253826988i    2.01054710714309 + 3.91609536599460i;
+    1.51113287696272 + 1.73895013443403i    1.05335076132197 + 1.07477470896015i    2.01054710714309 + 3.91609536599460i    2.94915872700349 - 10.2836578984531i
+];
+F_post = type3(t, w, P_gen, Y_gen_post, E_g);
+
+% t_k = [0.1541378056; 0.1178366462; -0.0439878840];
+% w_k = [1.0; 1.0; 1.0];
+t_k = trans_init(1:3)';
+w_k = trans_init(4:6)';
 time_data = [0];
-t_data = [t_k1; t_k2; t_k3];
-w_data = [w_k1; w_k2; w_k3];
-h = 0.002;
-Tc = 1/60
-for time = 0:h:Tc
-    t_kn = t_k + (2*h);
-    w_kn = w_k + (double(subs(F(1), w(1), w_k))*h);
+t_data = t_k;
+w_data = w_k;
+h = 0.02;
+Tf = 0;
+Tc = 0/60;
+Ts = 20;
+for time = 0:h:Tf-h
+    F_val = double(subs(F, vars, [t_k ; w_k].'));
+    t_kn = t_k + (F_val(1:3)*h);
+    w_kn = w_k + (F_val(4:6)*h);
     time_data = [time_data time];
     t_data = [t_data t_kn];
     w_data = [w_data w_kn];
     t_k = t_kn;
     w_k = w_kn;
+    time
 end
 
-figure(1)
-plot(time_data,t_data)
-figure(2)
-plot(time_data,w_data)
+for time = Tf:h:Tf+Tc
+    F_val = double(subs(F_fault, vars, [t_k ; w_k].'));
+    t_kn = t_k + (F_val(1:3)*h);
+    w_kn = w_k + (F_val(4:6)*h);
+    time_data = [time_data time];
+    t_data = [t_data t_kn];
+    w_data = [w_data w_kn];
+    t_k = t_kn;
+    w_k = w_kn;
+    time
+end
+
+for time = Tf+Tc+h:h:Ts
+    F_val = double(subs(F_post, vars, [t_k ; w_k].'));
+    t_kn = t_k + (F_val(1:3)*h);
+    w_kn = w_k + (F_val(4:6)*h);
+    time_data = [time_data time];
+    t_data = [t_data t_kn];
+    w_data = [w_data w_kn];
+    t_k = t_kn;
+    w_k = w_kn;
+    time
+end
+
+% plotting the graph
+mplot(time_data, t_data, 'Theta')
+mplot(time_data, w_data, 'Omega')
 
 %% Type 2
-% 
+
 % t = sym('t', [1 3]);
 % w = sym('w', [1 3]);
 % Eq = sym('Eq', [1 3]);
