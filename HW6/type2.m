@@ -49,7 +49,7 @@ function F = type2(t, w, Eq, Ed, Efd, Pm, Vref, Pc, Vw, Vc, P,Y,E, V,T)
     Ks = 100;
     Vwdot = (1/Tw)*(-1*Vw+Tw*((1-w(1))*omega_s));
     Vcdot = (1/Tb)*(-1*Vc+Vw+Ta*(Vwdot));
-    F(13) = (-Efd(1)-(200*((Ks*Vcdot)+Vref(1) - V(2))))/0.01;
+    % F(13) = (-Efd(1)-(200*((Ks*Vcdot)+Vref(1) - V(2))))/0.01;
     
     F = [F; Vwdot; Vcdot];
 end
