@@ -146,7 +146,7 @@ w_data = w_k;
 h = 0.02;
 Tf = 0;
 Tc = 0/60;
-Ts = 20;
+Ts = 10;
 for time = 0:h:Tf-h
     F_val = double(subs(F, vars, [t_k ; w_k].'));
     t_kn = t_k + (F_val(1:3)*h);
@@ -197,10 +197,13 @@ mplot(time_data, w_data, 'Omega')
 % Pm = sym('Pm', [1 3]);
 % Vref = sym('Vref', [1 3]);
 % Pc = sym('Pc', [1 3]);
-% F = type2(t, w, Eq, Ed, Efd, Pm, Vref, Pc, P_gen, Y_gen, E_g, V, T);
-% vars = [t, w, Eq, Ed, Efd, Pm, Vref, Pc];
+% Vw = sym('Vw');
+% Vc = sym('Vc');
 % 
-% x0 = [0.685 0.614 0.504  1 1 1  0.935 0.991 0.916  0.549 0.537 0.559  1.845 1.935 1.813  7.013 7.204 7.013 1.019 1.040 1.019 7.013 7.204 7.013];
+% vars = [t, w, Eq, Ed, Efd, Pm, Vref, Pc, Vw, Vc];
+% F = type2(t, w, Eq, Ed, Efd, Pm, Vref, Pc, Vw, Vc, P_gen, Y_gen, E_g, V, T);
+% 
+% x0 = [0.685 0.614 0.504  1 1 1  0.935 0.991 0.916  0.549 0.537 0.559  1.845 1.935 1.813  7.013 7.204 7.013 1.019 1.040 1.019 7.013 7.204 7.013 1 1];
 % sol = vpasolve(F,vars,x0)
 % 
 % state_vars = [t, w, Eq, Ed, Efd, Pm];

@@ -1,6 +1,6 @@
 function F = type3(t,w,P,Y,E)
     H = [6.5 6.175 6.175];
-    Kd = 2;
+    Kd = 30;
     omega_s = 2*pi*60;
     Ym = abs(Y);
     Ya = angle(Y);
