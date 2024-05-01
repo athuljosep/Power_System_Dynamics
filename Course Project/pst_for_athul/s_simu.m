@@ -58,9 +58,9 @@ svc_dc=[];tcsc_dc=[];dcr_dc=[];dci_dc=[];
 disp('non-linear simulation')
 % input data file
 %[dfile,pathname]=uigetfile('../pstdat/d*.m','Select Data File');
-pathname = 'C:\Users\Admin\Documents\School\ltv_pss_paper\pst_archive\pstdat\';
-dfile = 'd_minniWECC_base.m';
-% dfile = 'd2asbegp.m'; 
+pathname = 'C:\Users\athul.p\Documents\GitHub\Power_System_Dynamics\Course Project\';
+% dfile = 'd_minniWECC_base.m';
+dfile = 'd2asbegp.m'; 
 if pathname == 0
    error(' you must select a valid data file')
 else
@@ -1175,7 +1175,7 @@ clear tg_sig tgh_idx timestep tload tmax tmaxi tmaxr tmin tmini tminr
 clear tot_states tstep tstepi tstepr tswitch vdig vdmot vnc vqig vqmot ydcrmn ydcrmx  
 clear z z1 z_dpw z_pss z_tg zdc zdcl ze zig zm 
 
-S_SIMU_BATCH_MODE = 1;
+S_SIMU_BATCH_MODE = 0;
 if S_SIMU_BATCH_MODE
     load('K_sweep.mat');
     tmp = [dfile(1:end-2) '_Kwa' num2str(my_Kwa) '_Kcm' num2str(my_Kcm) '_Tdel' num2str(my_Tdel)];

@@ -2,7 +2,7 @@
 function F = type2(t, w, Eq, Ed, Efd, Pm, Vref, Pc, Vw, Vc, P,Y,E, V,T)
     %Vref = [1.019 1.040 1.019];
     H = [6.5 6.175 6.175];
-    Kd = 2;
+    Kd = 20;
     omega_s = 2*pi*60;
     Xd = (1.8 + 1.7)/2/9;
     Xdp = (0.3 + 0.55)/2/9;

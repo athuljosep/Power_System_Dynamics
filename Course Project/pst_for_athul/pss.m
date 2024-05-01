@@ -50,9 +50,9 @@ function [f] = pss(i,k,bus,flag)
 % Author:   Ryan T. Elliott
 % Date:     November 2017
 
-load('K_sweep.mat');
-% my_Kwa = 0.00;  % 8.67 (mini WECC), 13.3 (2-area);
-% my_Kcm = 0.00;  % 5.33 (mini WECC),  6.0 (2-area);
+% load('K_sweep.mat');
+my_Kwa = 0.00;  % 8.67 (mini WECC), 13.3 (2-area);
+my_Kcm = 0.00;  % 5.33 (mini WECC),  6.0 (2-area);
 
 % pss variables
 global  pss_con pss_pot pss_mb_idx pss_exc_idx
@@ -66,7 +66,7 @@ global  my_waref
 %----------------------------------------------------------------------------%
 % constructing the wide-area speed reference
 
-% my_Tdel = 0;  % FORCE EXPECTED DELAY TO ZERO
+my_Tdel = 0;  % FORCE EXPECTED DELAY TO ZERO
 my_dstd = min(3/60, my_Tdel);  % standard deviation of delay
 my_dt = sw_con(1,7);  % time step (must be constant)
 my_nsamp = ceil(sw_con(end,1)/my_dt);  % number of sample points
