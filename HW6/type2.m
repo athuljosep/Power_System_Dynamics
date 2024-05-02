@@ -2,7 +2,7 @@
 function F = type2(t, w, Eq, Ed, Efd, Pm, Vref, Pc, Vw, Vc, P,Y,E, V,T)
     %Vref = [1.019 1.040 1.019];
     H = [6.5 6.175 6.175];
-    Kd = 20;
+    Kd = 2;
     omega_s = 2*pi*60;
     Xd = (1.8 + 1.7)/2/9;
     Xdp = (0.3 + 0.55)/2/9;
@@ -44,12 +44,20 @@ function F = type2(t, w, Eq, Ed, Efd, Pm, Vref, Pc, Vw, Vc, P,Y,E, V,T)
     F = [F(1,:) F(2,:) F(3,:) F(4,:) F(5,:) F(6,:) F(7,:) F(8,:)].';
 
     Tw = 20;
-    Ta = 100;
-    Tb = 0.01;
-    Ks = 100;
-    Vwdot = (1/Tw)*(-1*Vw+Tw*((1-w(1))*omega_s));
-    Vcdot = (1/Tb)*(-1*Vc+Vw+Ta*(Vwdot));
-    % F(13) = (-Efd(1)-(200*((Ks*Vcdot)+Vref(1) - V(2))))/0.01;
+    Ta = 0.5;
+    Tb = 0.1;
+    Ks = 1;
+
+    % PSS on G2
+    Vwdot2 = (1/Tw)*(-1*Vw(1)+Tw*((1-w(1))*omega_s));
+    Vcdot2 = (1/Tb)*(-1*Vc(1)+Vw(1)+Ta*(Vwdot2));
+    % F(13) = (-Efd(1)-(200*((Ks*Vcdot2)+Vref(1) - V(2))))/0.01;
     
-    F = [F; Vwdot; Vcdot];
+    % PSS on G3
+    Vwdot3 = (1/Tw)*(-1*Vw(2)+Tw*((1-w(2))*omega_s));
+    Vcdot3 = (1/Tb)*(-1*Vc(2)+Vw(2)+Ta*(Vwdot3));
+    % F(14) = (-Efd(2)-(200*((Ks*Vc(2))+Vref(2) - V(3))))/0.01;
+
+    
+    F = [F; Vwdot2; Vcdot2; Vwdot3; Vcdot3];
 end
